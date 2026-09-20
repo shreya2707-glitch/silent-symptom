@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  body {
+    @apply bg-[#FAFAF8] text-gray-800 transition-colors duration-200;
+  }
+  .dark body {
+    @apply bg-[#1A1B23] text-gray-100;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl shadow-sm transition-colors duration-200;
+    @apply dark:bg-[#242530] dark:border dark:border-gray-700/50;
+  }
+  .pill {
+    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium transition-colors duration-200;
+  }
+  .pill-physical {
+    @apply bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300;
+  }
+  .pill-sleep {
+    @apply bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300;
+  }
+  .pill-mood {
+    @apply bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300;
+  }
+  .pill-other {
+    @apply bg-gray-100 text-gray-600 dark:bg-gray-700/50 dark:text-gray-300;
+  }
+  .btn-accent {
+    @apply bg-lavender-500 text-white rounded-xl py-3 px-6 font-medium transition-all duration-200;
+    @apply hover:bg-lavender-600 active:scale-[0.98] disabled:bg-gray-300 disabled:cursor-not-allowed;
+    @apply dark:disabled:bg-gray-700 dark:disabled:text-gray-500;
+  }
+  .btn-ghost {
+    @apply bg-transparent text-gray-600 rounded-xl py-2.5 px-4 font-medium transition-colors duration-200;
+    @apply hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full dark:bg-gray-600;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+/* Print styles for doctor summary */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .printable, .printable * {
+    visibility: visible;
+  }
+  .printable {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

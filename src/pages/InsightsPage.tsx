@@ -8,6 +8,7 @@ import {
 import { useTheme } from '@/context/ThemeContext';
 import { BodyMap } from '@/components/BodyMap';
 import { WeeklyComparison } from '@/components/WeeklyComparison';
+import { BarChart3 } from 'lucide-react';
 
 export function InsightsPage() {
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -58,46 +59,44 @@ export function InsightsPage() {
   const isDark = theme === 'dark';
   const axisColor = isDark ? '#9ca3af' : '#6b7280';
   const gridColor = isDark ? '#374151' : '#e5e7eb';
-  const lineColor = isDark ? '#b07aff' : '#9550f5';
+  const lineColor = isDark ? '#a87fcd' : '#8b5db8';
   const barColor = isDark ? '#5eead4' : '#14b8a6';
 
   const tagCategoryColor: Record<string, string> = {
     physical: isDark ? '#60a5fa' : '#3b82f6',
-    sleep: isDark ? '#facc15' : '#eab308',
-    mood: isDark ? '#c084fc' : '#a855f7',
+    sleep: isDark ? '#facc15' : '#ca9a1e',
+    mood: isDark ? '#c084fc' : '#9558c7',
     other: isDark ? '#9ca3af' : '#6b7280',
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-8 space-y-6">
+    <div className="max-w-4xl mx-auto p-8 space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Insights</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Trends and patterns across your {entries.length} logged {entries.length === 1 ? 'entry' : 'entries'}.
+        <h1 className="page-title">Insights</h1>
+        <p className="page-desc">
+          Trends and patterns across your <span className="font-semibold tabular-nums text-gray-600 dark:text-gray-300">{entries.length}</span> logged {entries.length === 1 ? 'entry' : 'entries'}.
         </p>
       </div>
 
       {entries.length === 0 ? (
-        <div className="card p-8 text-center">
-          <p className="text-sm text-gray-400 dark:text-gray-500">
-            No data to analyze yet. Log some symptoms to see your trends here.
-          </p>
+        <div className="empty-state">
+          <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700/50 flex items-center justify-center">
+            <BarChart3 className="w-5 h-5 text-gray-300 dark:text-gray-500" />
+          </div>
+          <p className="text-sm text-gray-400 dark:text-gray-500">No data to analyze yet.</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500">Log some symptoms to see your trends here.</p>
         </div>
       ) : (
-        <>
+        <div className="space-y-6 stagger">
           <WeeklyComparison entries={entries} />
 
-          <div className="card p-6 animate-fade-in">
-            <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
-              Body Map
-            </h2>
+          <div className="card p-6">
+            <h2 className="section-header mb-4">Body Map</h2>
             <BodyMap entries={entries} />
           </div>
 
-          <div className="card p-6 animate-fade-in">
-            <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
-              Severity Over Time
-            </h2>
+          <div className="card p-6">
+            <h2 className="section-header mb-4">Severity Over Time</h2>
             <ResponsiveContainer width="100%" height={240}>
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
@@ -125,10 +124,8 @@ export function InsightsPage() {
             </ResponsiveContainer>
           </div>
 
-          <div className="card p-6 animate-fade-in">
-            <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
-              Entries Per Day
-            </h2>
+          <div className="card p-6">
+            <h2 className="section-header mb-4">Entries Per Day</h2>
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
@@ -150,10 +147,8 @@ export function InsightsPage() {
             </ResponsiveContainer>
           </div>
 
-          <div className="card p-6 animate-fade-in">
-            <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
-              Most Common Symptoms
-            </h2>
+          <div className="card p-6">
+            <h2 className="section-header mb-4">Most Common Symptoms</h2>
             <div className="space-y-2.5">
               {tagRanking.map(([tag, count]) => {
                 const category = getTagCategory(tag);
@@ -161,20 +156,20 @@ export function InsightsPage() {
                 const pct = (count / maxTagCount) * 100;
                 return (
                   <div key={tag} className="flex items-center gap-3">
-                    <span className="text-sm text-gray-700 dark:text-gray-200 w-32 truncate">{tag}</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-200 w-32 truncate font-medium">{tag}</span>
                     <div className="flex-1 h-6 bg-gray-100 dark:bg-gray-700/40 rounded-lg overflow-hidden">
                       <div
                         className="h-full rounded-lg transition-all duration-500"
                         style={{ width: `${pct}%`, backgroundColor: color }}
                       />
                     </div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 w-8 text-right">{count}x</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 w-8 text-right font-semibold tabular-nums">{count}x</span>
                   </div>
                 );
               })}
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

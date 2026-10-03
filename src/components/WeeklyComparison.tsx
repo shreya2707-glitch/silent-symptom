@@ -63,15 +63,13 @@ export function WeeklyComparison({ entries }: { entries: Entry[] }) {
   const CntIcon = cntCfg.icon;
 
   return (
-    <div className="card p-5 animate-fade-in">
-      <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
-        This Week vs Last Week
-      </h2>
+    <div className="card p-6 animate-fade-in">
+      <h2 className="section-header mb-4">This Week vs Last Week</h2>
       <div className="grid grid-cols-2 gap-4">
         <div>
           <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Avg Severity</p>
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+            <span className="stat-number">
               {comparison.thisAvg}
             </span>
             <span className="text-xs text-gray-400 dark:text-gray-500">/ 5</span>
@@ -87,7 +85,7 @@ export function WeeklyComparison({ entries }: { entries: Entry[] }) {
         <div>
           <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Entries Logged</p>
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+            <span className="stat-number tabular-nums">
               {comparison.thisCount}
             </span>
           </div>

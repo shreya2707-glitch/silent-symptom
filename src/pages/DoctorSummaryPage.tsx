@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase, type Entry } from '@/lib/supabase';
 import { generateDoctorSummary } from '@/lib/ai';
-import { Loader2, Copy, Check, FileDown, FileText } from 'lucide-react';
+import { Loader2, Copy, Check, FileDown, FileText, ClipboardList } from 'lucide-react';
 
 export function DoctorSummaryPage() {
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -41,12 +41,10 @@ export function DoctorSummaryPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-8 space-y-6">
+    <div className="max-w-3xl mx-auto p-8 space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Doctor Summary</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Generate a clinical-style summary of your symptoms for your next doctor visit.
-        </p>
+        <h1 className="page-title">Doctor Summary</h1>
+        <p className="page-desc">Generate a clinical-style summary of your symptoms for your next doctor visit.</p>
       </div>
 
       <div className="no-print flex items-center gap-3 flex-wrap">
@@ -69,11 +67,11 @@ export function DoctorSummaryPage() {
         </button>
         {hasGenerated && !generating && (
           <>
-            <button onClick={handleCopy} className="btn-ghost flex items-center gap-2 border border-gray-200 dark:border-gray-600">
+            <button onClick={handleCopy} className="btn-secondary flex items-center gap-2">
               {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
               {copied ? 'Copied!' : 'Copy to clipboard'}
             </button>
-            <button onClick={handleExportPDF} className="btn-ghost flex items-center gap-2 border border-gray-200 dark:border-gray-600">
+            <button onClick={handleExportPDF} className="btn-secondary flex items-center gap-2">
               <FileDown className="w-4 h-4" />
               Export as PDF
             </button>
@@ -82,16 +80,18 @@ export function DoctorSummaryPage() {
       </div>
 
       {entries.length === 0 && !generating && (
-        <div className="card p-8 text-center">
-          <p className="text-sm text-gray-400 dark:text-gray-500">
-            No symptom entries yet. Log some symptoms first, then generate a summary here.
-          </p>
+        <div className="empty-state">
+          <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700/50 flex items-center justify-center">
+            <ClipboardList className="w-5 h-5 text-gray-300 dark:text-gray-500" />
+          </div>
+          <p className="text-sm text-gray-400 dark:text-gray-500">No symptom entries yet.</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500">Log some symptoms first, then generate a summary here.</p>
         </div>
       )}
 
       {generating && (
-        <div className="card p-8 text-center animate-fade-in">
-          <Loader2 className="w-6 h-6 animate-spin text-lavender-500 mx-auto mb-3" />
+        <div className="empty-state animate-fade-in">
+          <Loader2 className="w-6 h-6 animate-spin text-lavender-500" />
           <p className="text-sm text-gray-500 dark:text-gray-400">Compiling your summary…</p>
         </div>
       )}

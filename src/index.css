@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -18,32 +18,64 @@
 
 @layer components {
   .card {
-    @apply bg-white rounded-2xl shadow-sm transition-colors duration-200;
+    @apply bg-white rounded-2xl shadow-sm transition-all duration-200;
     @apply dark:bg-[#242530] dark:border dark:border-gray-700/50;
   }
+  .card-interactive {
+    @apply card hover:shadow-md hover:scale-[1.01] cursor-default;
+  }
   .pill {
-    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium transition-colors duration-200;
+    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-150;
   }
   .pill-physical {
-    @apply bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300;
+    @apply bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300;
   }
   .pill-sleep {
-    @apply bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300;
+    @apply bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300;
   }
   .pill-mood {
-    @apply bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300;
+    @apply bg-purple-50 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300;
   }
   .pill-other {
     @apply bg-gray-100 text-gray-600 dark:bg-gray-700/50 dark:text-gray-300;
   }
+  .pill:hover {
+    @apply scale-105;
+  }
   .btn-accent {
-    @apply bg-lavender-500 text-white rounded-xl py-3 px-6 font-medium transition-all duration-200;
-    @apply hover:bg-lavender-600 active:scale-[0.98] disabled:bg-gray-300 disabled:cursor-not-allowed;
+    @apply bg-lavender-500 text-white rounded-xl py-3 px-6 font-semibold text-sm tracking-wide transition-all duration-150;
+    @apply hover:bg-lavender-600 active:scale-[0.97] disabled:bg-gray-300 disabled:cursor-not-allowed;
     @apply dark:disabled:bg-gray-700 dark:disabled:text-gray-500;
   }
+  .btn-secondary {
+    @apply bg-transparent rounded-xl py-2.5 px-4 font-medium text-sm transition-all duration-150;
+    @apply border border-gray-200 text-gray-600 hover:bg-gray-50 active:scale-[0.97];
+    @apply dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700/40;
+  }
   .btn-ghost {
-    @apply bg-transparent text-gray-600 rounded-xl py-2.5 px-4 font-medium transition-colors duration-200;
+    @apply bg-transparent text-gray-600 rounded-xl py-2.5 px-4 font-medium text-sm transition-colors duration-150;
     @apply hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50;
+  }
+  .input-field {
+    @apply w-full rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-[#1A1B23] px-4 py-2.5;
+    @apply text-gray-800 dark:text-gray-100 text-sm outline-none transition-all duration-150;
+    @apply focus:ring-2 focus:ring-lavender-400 focus:border-transparent;
+    @apply placeholder:text-gray-400 dark:placeholder:text-gray-500;
+  }
+  .section-header {
+    @apply text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500;
+  }
+  .page-title {
+    @apply text-2xl font-extrabold text-gray-800 dark:text-gray-100 tracking-tight;
+  }
+  .page-desc {
+    @apply text-sm text-gray-500 dark:text-gray-400 mt-1.5 leading-relaxed;
+  }
+  .stat-number {
+    @apply text-2xl font-bold tabular-nums text-gray-800 dark:text-gray-100;
+  }
+  .empty-state {
+    @apply card p-12 text-center flex flex-col items-center gap-3;
   }
 }
 
@@ -57,6 +89,20 @@
 ::-webkit-scrollbar-track {
   @apply bg-transparent;
 }
+
+/* Staggered fade-in for card lists */
+.stagger > * {
+  animation: fadeInUp 400ms ease-out both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 60ms; }
+.stagger > *:nth-child(3) { animation-delay: 120ms; }
+.stagger > *:nth-child(4) { animation-delay: 180ms; }
+.stagger > *:nth-child(5) { animation-delay: 240ms; }
+.stagger > *:nth-child(6) { animation-delay: 300ms; }
+.stagger > *:nth-child(7) { animation-delay: 360ms; }
+.stagger > *:nth-child(8) { animation-delay: 420ms; }
+.stagger > *:nth-child(n+9) { animation-delay: 480ms; }
 
 /* Print styles for doctor summary */
 @media print {

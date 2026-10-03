@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { supabase, type Entry } from '@/lib/supabase';
+import { useState } from 'react';
+import type { Entry } from '@/lib/supabase';
 import { TagPill } from '@/components/TagPill';
 import { Flag } from 'lucide-react';
 
@@ -19,18 +19,18 @@ export function EntryCard({ entry, onFlagToggle }: { entry: Entry; onFlagToggle?
 
   return (
     <div
-      className={`card p-5 animate-fade-in-up ${
+      className={`card-interactive p-5 ${
         entry.flagged ? 'ring-2 ring-lavender-400 dark:ring-lavender-500' : ''
       }`}
     >
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-          <span className="font-medium">{dateStr}</span>
-          <span>·</span>
-          <span>{timeStr}</span>
+          <span className="font-semibold">{dateStr}</span>
+          <span className="text-gray-300 dark:text-gray-600">·</span>
+          <span className="tabular-nums">{timeStr}</span>
           {entry.body_area && (
             <>
-              <span>·</span>
+              <span className="text-gray-300 dark:text-gray-600">·</span>
               <span className="text-gray-400 dark:text-gray-500">{entry.body_area}</span>
             </>
           )}
@@ -41,7 +41,7 @@ export function EntryCard({ entry, onFlagToggle }: { entry: Entry; onFlagToggle?
               {[1, 2, 3, 4, 5].map((n) => (
                 <div
                   key={n}
-                  className={`w-1.5 h-3 rounded-sm ${n <= entry.severity ? severityColor(entry.severity) : 'bg-gray-200 dark:bg-gray-600'}`}
+                  className={`w-1.5 h-3 rounded-sm transition-colors duration-200 ${n <= entry.severity ? severityColor(entry.severity) : 'bg-gray-200 dark:bg-gray-600'}`}
                 />
               ))}
             </div>
@@ -49,7 +49,7 @@ export function EntryCard({ entry, onFlagToggle }: { entry: Entry; onFlagToggle?
           {onFlagToggle && (
             <button
               onClick={() => onFlagToggle(entry.id, !entry.flagged)}
-              className={`p-1 rounded-lg transition-colors duration-200 ${
+              className={`p-1 rounded-lg transition-all duration-150 ${
                 entry.flagged
                   ? 'text-lavender-500 dark:text-lavender-400'
                   : 'text-gray-300 dark:text-gray-600 hover:text-gray-400 dark:hover:text-gray-400'
@@ -68,7 +68,7 @@ export function EntryCard({ entry, onFlagToggle }: { entry: Entry; onFlagToggle?
       {entry.raw_text.length > 150 && (
         <button
           onClick={() => setShowFull(!showFull)}
-          className="text-xs text-lavender-600 dark:text-lavender-400 mt-1 hover:underline"
+          className="text-xs text-lavender-600 dark:text-lavender-400 mt-1.5 font-medium hover:underline"
         >
           {showFull ? 'Show less' : 'Show more'}
         </button>

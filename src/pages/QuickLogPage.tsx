@@ -4,7 +4,7 @@ import { extractFromText } from '@/lib/ai';
 import { EntryCard } from '@/components/EntryCard';
 import { NudgeBanner } from '@/components/NudgeBanner';
 import { WeeklyComparison } from '@/components/WeeklyComparison';
-import { Loader2, Flame, Sparkles } from 'lucide-react';
+import { Loader2, Flame, Sparkles, PenLine } from 'lucide-react';
 
 export function QuickLogPage() {
   const [text, setText] = useState('');
@@ -119,19 +119,20 @@ export function QuickLogPage() {
   const maxSpark = Math.max(...sparkline, 1);
 
   return (
-    <div className="max-w-2xl mx-auto p-8 space-y-6">
+    <div className="max-w-2xl mx-auto p-8 space-y-8">
       <NudgeBanner hoursSinceLastEntry={hoursSinceLast} />
 
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">How are you feeling today?</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Write freely — we'll organize the details.</p>
+          <h1 className="text-3xl font-extrabold text-gray-800 dark:text-gray-100 tracking-tight">How are you feeling today?</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">Write freely — we'll organize the details.</p>
         </div>
         <div className="flex items-center gap-4">
           {streak > 0 && (
-            <div className="flex items-center gap-1.5 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 px-3 py-1.5 rounded-full text-sm font-medium animate-fade-in">
+            <div className="flex items-center gap-1.5 bg-orange-50 dark:bg-orange-950/30 text-orange-600 dark:text-orange-400 px-3 py-1.5 rounded-full text-sm font-semibold animate-fade-in">
               <Flame className="w-4 h-4" />
-              <span>{streak}-day streak</span>
+              <span className="tabular-nums">{streak}</span>
+              <span className="font-medium">-day streak</span>
             </div>
           )}
           <div className="flex items-end gap-1 h-8" title="7-day severity trend">
@@ -158,7 +159,7 @@ export function QuickLogPage() {
             </div>
             <button
               onClick={dismissTooltip}
-              className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-gray-600 text-white rounded-full text-xs flex items-center justify-center hover:bg-gray-500"
+              className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-gray-600 text-white rounded-full text-xs flex items-center justify-center hover:bg-gray-500 transition-colors duration-150"
             >
               ×
             </button>
@@ -168,10 +169,10 @@ export function QuickLogPage() {
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="My lower back has been aching since I woke up. Felt a sharp pinch when bending over..."
-          className="w-full h-32 resize-none rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-[#1A1B23] px-4 py-3 text-gray-800 dark:text-gray-100 outline-none focus:ring-2 focus:ring-lavender-400 transition-all text-sm leading-relaxed"
+          className="w-full h-32 resize-none rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-[#1A1B23] px-4 py-3 text-gray-800 dark:text-gray-100 outline-none focus:ring-2 focus:ring-lavender-400 focus:border-transparent transition-all text-sm leading-relaxed placeholder:text-gray-400 dark:placeholder:text-gray-500"
         />
         <div className="flex items-center justify-between mt-4">
-          <span className="text-xs text-gray-400 dark:text-gray-500">
+          <span className="text-xs text-gray-400 dark:text-gray-500 tabular-nums">
             {text.trim() ? `${text.trim().length} characters` : 'Start typing above'}
           </span>
           <button
@@ -191,14 +192,17 @@ export function QuickLogPage() {
         </div>
       </div>
 
-      <div>
-        <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Recent entries</h2>
+      <div className="space-y-4">
+        <h2 className="section-header">Recent Entries</h2>
         {entries.length === 0 ? (
-          <div className="card p-8 text-center">
+          <div className="empty-state">
+            <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700/50 flex items-center justify-center">
+              <PenLine className="w-5 h-5 text-gray-300 dark:text-gray-500" />
+            </div>
             <p className="text-sm text-gray-400 dark:text-gray-500">No entries yet. Log your first symptom above.</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-3 stagger">
             {entries.map((entry) => (
               <EntryCard key={entry.id} entry={entry} onFlagToggle={handleFlagToggle} />
             ))}

@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { supabase, type Entry } from '@/lib/supabase';
 import { EntryCard } from '@/components/EntryCard';
-import { Filter, Search } from 'lucide-react';
+import { Filter, Search, Clock } from 'lucide-react';
 
 export function TimelinePage() {
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -47,14 +47,12 @@ export function TimelinePage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-8 space-y-6">
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Timeline</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            {entries.length} {entries.length === 1 ? 'entry' : 'entries'} logged
-          </p>
-        </div>
+    <div className="max-w-3xl mx-auto p-8 space-y-8">
+      <div>
+        <h1 className="page-title">Timeline</h1>
+        <p className="page-desc">
+          <span className="font-semibold tabular-nums text-gray-600 dark:text-gray-300">{entries.length}</span> {entries.length === 1 ? 'entry' : 'entries'} logged
+        </p>
       </div>
 
       <div className="flex items-center gap-3 flex-wrap">
@@ -65,15 +63,15 @@ export function TimelinePage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search entries by keyword…"
-            className="w-full rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-[#1A1B23] pl-9 pr-4 py-2 text-sm text-gray-700 dark:text-gray-200 outline-none focus:ring-2 focus:ring-lavender-400 transition-all"
+            className="input-field pl-9"
           />
         </div>
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-gray-400" />
+          <Filter className="w-4 h-4 text-gray-400 flex-shrink-0" />
           <select
             value={filterTag}
             onChange={(e) => setFilterTag(e.target.value)}
-            className="rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-[#1A1B23] px-3 py-2 text-sm text-gray-700 dark:text-gray-200 outline-none focus:ring-2 focus:ring-lavender-400 transition-all"
+            className="input-field cursor-pointer"
           >
             <option value="all">All tags</option>
             {allTags.map((tag) => (
@@ -84,11 +82,17 @@ export function TimelinePage() {
       </div>
 
       {loading ? (
-        <div className="card p-8 text-center">
+        <div className="empty-state">
+          <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700/50 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-gray-300 dark:text-gray-500 animate-pulse" />
+          </div>
           <p className="text-sm text-gray-400 dark:text-gray-500">Loading entries…</p>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="card p-8 text-center">
+        <div className="empty-state">
+          <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700/50 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-gray-300 dark:text-gray-500" />
+          </div>
           <p className="text-sm text-gray-400 dark:text-gray-500">
             {searchQuery.trim()
               ? `No entries matching "${searchQuery}".`
@@ -98,7 +102,7 @@ export function TimelinePage() {
           </p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-3 stagger">
           {filtered.map((entry) => (
             <EntryCard key={entry.id} entry={entry} onFlagToggle={handleFlagToggle} />
           ))}

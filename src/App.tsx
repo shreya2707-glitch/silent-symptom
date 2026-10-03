@@ -40,11 +40,13 @@ function AuthGate() {
   return (
     <div className="flex min-h-screen bg-[#FAFAF8] dark:bg-[#1A1B23] transition-colors duration-200">
       <Sidebar currentPage={page} onNavigate={setPage} />
-      <main className="flex-1 overflow-y-auto">
-        {page === 'quicklog' && <QuickLogPage />}
-        {page === 'timeline' && <TimelinePage />}
-        {page === 'summary' && <DoctorSummaryPage />}
-        {page === 'insights' && <InsightsPage />}
+      <main className="flex-1 overflow-y-auto bg-gray-50/50 dark:bg-[#1A1B23]">
+        <div className="max-w-5xl mx-auto">
+          {page === 'quicklog' && <QuickLogPage />}
+          {page === 'timeline' && <TimelinePage />}
+          {page === 'summary' && <DoctorSummaryPage />}
+          {page === 'insights' && <InsightsPage />}
+        </div>
       </main>
     </div>
   );

@@ -1,53 +1,129 @@
-# 🩺 Silent Symptom
+<div align="center">
 
-**Turning scattered symptoms into a doctor-ready story.**
+```
+┌─────────────────────────────────────────────┐
+│  🩺  SILENT SYMPTOM                           │
+│  entry logged · HACKDAY 1.0 · 8-hour build   │
+└─────────────────────────────────────────────┘
+```
 
-Built for HACKDAY 1.0 — Theme: *Tech for a Better Tomorrow*
+### *"felt dismissed again today. nobody connects the dots until it's too late."*
+**tags:** `#frustration` `#7-10 years` `#finally-building-something`
 
-🔗 **Live Demo:** https://silent-symptom-healt-2k83.bolt.host/
+[![Live Demo](https://img.shields.io/badge/→_try_it_live-3EC6B6?style=for-the-badge)](https://silent-symptom-healt-2k83.bolt.host/)
+[![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com/)
+[![Claude](https://img.shields.io/badge/Claude_AI-D97757?style=flat-square&logo=anthropic&logoColor=white)](https://www.anthropic.com/)
+[![Tailwind](https://img.shields.io/badge/Tailwind-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 
----
+</div>
 
-## 💡 The Problem
+<br>
 
-Conditions like endometriosis, autoimmune disorders, and chronic fatigue often take **years** to diagnose. Patients experience symptoms daily, but individually each one feels "too minor" to mention — headaches, fatigue, joint pain, brain fog. By the time they see a doctor, the pattern is lost, and the appointment becomes a vague, disconnected list of complaints instead of a clear clinical picture.
+## 📖 The Story So Far
 
-## 🚀 The Solution
+Somewhere, right now, someone is writing a note on their phone — *"tired again, joints ache, didn't sleep"* — and deleting it a second later. *Too small to mention. The doctor's busy. It's probably nothing.*
 
-**Silent Symptom** lets patients log how they feel in plain, everyday language — no medical vocabulary needed. Behind the scenes, AI organizes each entry into structured tags and severity scores, builds a visual timeline, and — with one click — compiles weeks of scattered notes into a clean, doctor-ready summary the patient can bring to their next appointment.
+They do this for **years**. Literally — endometriosis, autoimmune disorders, chronic fatigue: the average diagnosis takes **7 to 10 years**, largely because no single symptom ever feels big enough to report on its own.
 
-## ✨ Features
+The pattern was always there. It just never got *organized* long enough to be seen.
 
-- **Quick Log** — Write freely about how you feel; AI automatically extracts symptoms, severity, and affected body area
-- **Timeline** — A chronological, tag-filterable history of every entry, with the option to flag entries you want to bring up with your doctor
-- **Doctor Summary** — One click compiles your full history into a concise, skimmable clinical-style report — copy it, print it, or export as PDF
-- **Insights** — Visualize symptom frequency and patterns over time to spot trends before your doctor even asks
-- **Streak tracking** — Encourages consistent daily logging
-- **Light/Dark theme** — Calm, accessible design in both modes
-- **Secure accounts** — Real authentication (Supabase) so your health data is private to you
+**So we built the thing that organizes it.**
 
-## 🛠️ Tech Stack
+<br>
 
-- **Frontend:** React + Tailwind CSS
-- **Backend / Auth / Database:** Supabase
-- **AI:** Claude (Anthropic API) for symptom tagging and doctor summary generation
-- **Charts:** Recharts
-- **Hosting:** Bolt.new (bolt.host)
+## 🧵 What Silent Symptom Actually Does
 
-## 🎯 Impact
+```
+  you type this ↓                           a doctor sees this ↓
+┌─────────────────────────┐              ┌────────────────────────────┐
+│ "felt tired again,      │              │  SYMPTOM SUMMARY           │
+│  joints ached this      │   ──AI──▶    │  Recurring: fatigue (6x),  │
+│  morning, slept badly"  │              │  joint pain (4x). Pattern: │
+│                         │              │  worse on poor-sleep days. │
+└─────────────────────────┘              └────────────────────────────┘
+```
 
-Silent Symptom doesn't diagnose — it organizes. By turning the patient's lived experience into structured, pattern-visible data, it helps close the diagnostic delay gap for conditions that are too often dismissed or overlooked, and gives patients a way to advocate for themselves with real evidence instead of memory alone.
+| Feature | What it's really for |
+|---|---|
+| 📝 **Quick Log** | A blank page, not a form. Say it however it comes out — no medical words required. |
+| 📅 **Timeline** | Your scattered notes, finally lined up in order. Flag the ones that felt *different*. |
+| 🩺 **Doctor Summary** | One click. Weeks of mess → a report a doctor can skim in 30 seconds. |
+| 📊 **Insights** | The pattern you couldn't see while you were living inside it. |
 
-## 📈 What's Next
+<br>
 
-- Wearable integration (sleep, heart rate correlation with symptoms)
-- Direct export/share to patient portals
-- Anonymized, community-sourced pattern insights across similar symptom profiles
+## 🏗️ How It's Built
 
-## 👥 Team
+```
+Patient logs a symptom
+        │
+        ▼
+AI quietly structures it        ← Claude (Anthropic)
+        │
+        ▼
+Stored, private, per-account    ← Supabase
+        │
+        ▼
+Doctor-ready summary, on demand
+```
 
-Built at HACKDAY 1.0 by ever.
+**Stack:** React + Tailwind · Supabase (auth + database) · Claude AI · Recharts · deployed on Bolt.host
 
----
+<br>
 
-*This tool is for personal symptom tracking and does not provide medical diagnosis. Always consult a healthcare professional.*
+## 🔗 Go Poke At It
+
+**[silent-symptom-healt-2k83.bolt.host →](https://silent-symptom-healt-2k83.bolt.host/)**
+
+Sign up, log two or three entries in plain language over a few "days," then hit **Generate Doctor Summary**. That messy-notes-to-clean-report jump is the whole point of this project — it should feel like a small magic trick.
+
+<br>
+
+## 🗓️ Changelog *(the project's own symptom log, if you will)*
+
+```
+v1.2  ·  Security & Polish
+      — password strength checks, show/hide toggle, kinder error messages
+      — full UI pass: spacing, hover states, typography, consistent cards
+      — dark mode audited end-to-end (yes, even the charts)
+
+v1.1  ·  It Got Real
+      — moved off localStorage, onto real Supabase auth + database
+      — entries now persist per account, seeded with demo history on signup
+
+v1.0  ·  Born at HACKDAY 1.0
+      — Quick Log → Timeline → Doctor Summary → Insights, working end to end
+      — AI tagging + AI-generated clinical summaries
+      — calm, non-clinical visual design, light & dark themes
+```
+
+<br>
+
+## 🌱 If We Had More Time
+
+- Wearables plugged in — let sleep and heart-rate data tag along with the symptoms
+- A clinician-side view, for reviewing flagged entries before the patient even walks in
+- Anonymized, opt-in pattern-sharing across people with similar symptom profiles
+- Speaking more than one language, because dismissal isn't an English-only problem
+
+<br>
+
+## 👩‍💻 Built By
+
+**Shreya** — [@shreya2707-glitch](https://github.com/shreya2707-glitch) — at HACKDAY 1.0, in one 8-hour sitting.
+
+<br>
+
+<div align="center">
+
+```
+┌─────────────────────────────────────────────┐
+│  not a diagnosis. just a pattern, finally    │
+│  organized enough for someone to believe.    │
+└─────────────────────────────────────────────┘
+```
+
+*For personal symptom tracking only — always consult a healthcare professional.*
+
+</div>

@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Heart, Loader2 } from 'lucide-react';
+import { PasswordInput } from '@/components/PasswordInput';
+import { friendlyAuthError } from '@/lib/password';
 
 export function LoginPage({ onSwitch }: { onSwitch: () => void }) {
   const { signIn } = useAuth();
@@ -14,7 +16,7 @@ export function LoginPage({ onSwitch }: { onSwitch: () => void }) {
     setError('');
     setLoading(true);
     const { error } = await signIn(email, password);
-    if (error) setError(error);
+    if (error) setError(friendlyAuthError(error));
     setLoading(false);
   };
 
@@ -43,16 +45,19 @@ export function LoginPage({ onSwitch }: { onSwitch: () => void }) {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Password</label>
-            <input
-              type="password"
+            <PasswordInput
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="input-field"
-              placeholder="••••••••"
+              onChange={setPassword}
+              ariaLabel="Password"
+              describedBy={error ? 'login-error' : undefined}
+              autoComplete="current-password"
             />
           </div>
-          {error && <p className="text-sm text-red-500 dark:text-red-400 font-medium">{error}</p>}
+          {error && (
+            <p id="login-error" className="text-sm text-red-500 dark:text-red-400 font-medium" role="alert">
+              {error}
+            </p>
+          )}
           <button type="submit" disabled={loading} className="btn-accent w-full flex items-center justify-center gap-2">
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
             {loading ? 'Signing in…' : 'Log in'}

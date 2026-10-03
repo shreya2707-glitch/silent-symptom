@@ -1,23 +1,38 @@
 import { useState, type FormEvent } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { Heart, Loader2 } from 'lucide-react';
+import { Heart, Loader2, Check, Circle } from 'lucide-react';
 import { PulseWave } from '@/components/PulseWave';
+import { PasswordInput } from '@/components/PasswordInput';
+import {
+  PASSWORD_CHECKS,
+  isPasswordValid,
+  getPasswordStrength,
+  STRENGTH_CONFIG,
+  friendlyAuthError,
+} from '@/lib/password';
 
 export function SignupPage({ onSwitch }: { onSwitch: () => void }) {
   const { signUp } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [condition, setCondition] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const strength = getPasswordStrength(password);
+  const strengthCfg = STRENGTH_CONFIG[strength];
+  const passwordsMatch = password === confirmPassword;
+  const showConfirmError = confirmPassword.length > 0 && !passwordsMatch;
+  const canSubmit = isPasswordValid(password) && passwordsMatch && name.trim().length > 0 && email.trim().length > 0;
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
     const { error } = await signUp(email, password, name, condition.trim() || undefined);
-    if (error) setError(error);
+    if (error) setError(friendlyAuthError(error));
     setLoading(false);
   };
 
@@ -59,15 +74,60 @@ export function SignupPage({ onSwitch }: { onSwitch: () => void }) {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Password</label>
-            <input
-              type="password"
+            <PasswordInput
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              className="input-field"
-              placeholder="At least 6 characters"
+              onChange={setPassword}
+              ariaLabel="Password"
+              describedBy="password-strength password-checks"
+              autoComplete="new-password"
             />
+
+            {/* Strength bar */}
+            {password.length > 0 && (
+              <div className="mt-2 flex items-center gap-2" id="password-strength" role="status" aria-live="polite">
+                <div className="flex-1 h-1.5 bg-gray-100 dark:bg-gray-700/50 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 ${strengthCfg.barClass}`}
+                    style={{ width: strengthCfg.width }}
+                  />
+                </div>
+                <span className={`text-xs font-semibold ${strengthCfg.color}`}>{strengthCfg.label}</span>
+              </div>
+            )}
+
+            {/* Requirements checklist */}
+            <ul id="password-checks" className="mt-2.5 space-y-1" aria-label="Password requirements">
+              {PASSWORD_CHECKS.map((check) => {
+                const passed = check.test(password);
+                return (
+                  <li key={check.label} className="flex items-center gap-1.5 text-xs">
+                    {passed ? (
+                      <Check className="w-3.5 h-3.5 text-teal-500 dark:text-teal-400 flex-shrink-0" />
+                    ) : (
+                      <Circle className="w-3 h-3 text-gray-300 dark:text-gray-600 flex-shrink-0" />
+                    )}
+                    <span className={passed ? 'text-teal-600 dark:text-teal-400' : 'text-gray-400 dark:text-gray-500'}>
+                      {check.label}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Confirm Password</label>
+            <PasswordInput
+              value={confirmPassword}
+              onChange={setConfirmPassword}
+              ariaLabel="Confirm password"
+              describedBy={showConfirmError ? 'confirm-error' : undefined}
+              autoComplete="new-password"
+            />
+            {showConfirmError && (
+              <p id="confirm-error" className="text-xs text-red-500 dark:text-red-400 mt-1.5 font-medium" role="alert">
+                Passwords don't match
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
@@ -82,8 +142,16 @@ export function SignupPage({ onSwitch }: { onSwitch: () => void }) {
             />
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-1.5 leading-relaxed">This helps personalize your experience — it's not a diagnosis.</p>
           </div>
-          {error && <p className="text-sm text-red-500 dark:text-red-400 font-medium">{error}</p>}
-          <button type="submit" disabled={loading} className="btn-accent w-full flex items-center justify-center gap-2">
+          {error && (
+            <p className="text-sm text-red-500 dark:text-red-400 font-medium" role="alert">
+              {error}
+            </p>
+          )}
+          <button
+            type="submit"
+            disabled={!canSubmit || loading}
+            className="btn-accent w-full flex items-center justify-center gap-2"
+          >
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
             {loading ? 'Creating account…' : 'Sign up'}
           </button>

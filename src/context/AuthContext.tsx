@@ -6,10 +6,12 @@ type AuthContextType = {
   session: Session | null;
   user: User | null;
   displayName: string | null;
+  condition: string | null;
   loading: boolean;
-  signUp: (email: string, password: string, displayName: string) => Promise<{ error: string | null }>;
+  signUp: (email: string, password: string, displayName: string, condition?: string) => Promise<{ error: string | null }>;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
+  updateCondition: (condition: string) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,6 +23,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const user = session?.user ?? null;
   const displayName =
     user?.user_metadata?.display_name ?? user?.email?.split('@')[0] ?? null;
+  const condition =
+    user?.user_metadata?.condition ?? null;
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -35,11 +39,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, name: string) => {
+  const signUp = async (email: string, password: string, name: string, cond?: string) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { display_name: name } },
+      options: { data: { display_name: name, condition: cond || '' } },
     });
     if (error) return { error: error.message };
     if (data.user) {
@@ -58,8 +62,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
   };
 
+  const updateCondition = async (cond: string) => {
+    const { error } = await supabase.auth.updateUser({
+      data: { condition: cond },
+    });
+    if (error) console.error('Failed to update condition:', error.message);
+  };
+
   return (
-    <AuthContext.Provider value={{ session, user, displayName, loading, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ session, user, displayName, condition, loading, signUp, signIn, signOut, updateCondition }}>
       {children}
     </AuthContext.Provider>
   );

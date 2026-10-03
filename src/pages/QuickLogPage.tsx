@@ -2,15 +2,19 @@ import { useEffect, useState } from 'react';
 import { supabase, type Entry } from '@/lib/supabase';
 import { extractFromText } from '@/lib/ai';
 import { EntryCard } from '@/components/EntryCard';
+import { NudgeBanner } from '@/components/NudgeBanner';
+import { WeeklyComparison } from '@/components/WeeklyComparison';
 import { Loader2, Flame, Sparkles } from 'lucide-react';
 
 export function QuickLogPage() {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [entries, setEntries] = useState<Entry[]>([]);
+  const [allEntries, setAllEntries] = useState<Entry[]>([]);
   const [streak, setStreak] = useState(0);
   const [sparkline, setSparkline] = useState<number[]>([]);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [hoursSinceLast, setHoursSinceLast] = useState<number | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -29,17 +33,27 @@ export function QuickLogPage() {
 
     const { data: allData } = await supabase
       .from('entries')
-      .select('created_at, severity')
+      .select('*')
       .order('created_at', { ascending: true });
 
     if (allData) {
-      const last7 = computeLast7Days(allData as Pick<Entry, 'created_at' | 'severity'>[]);
+      const typed = allData as Entry[];
+      setAllEntries(typed);
+      const last7 = computeLast7Days(typed);
       setSparkline(last7);
-      setStreak(computeStreak(allData as Pick<Entry, 'created_at'>[]));
+      setStreak(computeStreak(typed));
+
+      if (typed.length > 0) {
+        const latest = new Date(typed[typed.length - 1].created_at);
+        const diffMs = Date.now() - latest.getTime();
+        setHoursSinceLast(diffMs / (1000 * 60 * 60));
+      } else {
+        setHoursSinceLast(null);
+      }
     }
   };
 
-  const computeLast7Days = (all: Pick<Entry, 'created_at' | 'severity'>[]): number[] => {
+  const computeLast7Days = (all: Entry[]): number[] => {
     const days: number[] = [];
     const now = new Date();
     for (let i = 6; i >= 0; i--) {
@@ -58,7 +72,7 @@ export function QuickLogPage() {
     return days;
   };
 
-  const computeStreak = (all: Pick<Entry, 'created_at'>[]): number => {
+  const computeStreak = (all: Entry[]): number => {
     const days = new Set(
       all.map((e) => {
         const d = new Date(e.created_at);
@@ -106,6 +120,8 @@ export function QuickLogPage() {
 
   return (
     <div className="max-w-2xl mx-auto p-8 space-y-6">
+      <NudgeBanner hoursSinceLastEntry={hoursSinceLast} />
+
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">How are you feeling today?</h1>
@@ -189,6 +205,8 @@ export function QuickLogPage() {
           </div>
         )}
       </div>
+
+      <WeeklyComparison entries={allEntries} />
     </div>
   );
 

@@ -1,12 +1,13 @@
 import { useEffect, useState, useMemo } from 'react';
 import { supabase, type Entry } from '@/lib/supabase';
 import { EntryCard } from '@/components/EntryCard';
-import { Filter } from 'lucide-react';
+import { Filter, Search } from 'lucide-react';
 
 export function TimelinePage() {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterTag, setFilterTag] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchEntries();
@@ -28,7 +29,17 @@ export function TimelinePage() {
     return Array.from(tagSet).sort();
   }, [entries]);
 
-  const filtered = filterTag === 'all' ? entries : entries.filter((e) => e.tags.includes(filterTag));
+  const filtered = useMemo(() => {
+    let result = entries;
+    if (filterTag !== 'all') {
+      result = result.filter((e) => e.tags.includes(filterTag));
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter((e) => e.raw_text.toLowerCase().includes(q));
+    }
+    return result;
+  }, [entries, filterTag, searchQuery]);
 
   const handleFlagToggle = async (id: string, flagged: boolean) => {
     await supabase.from('entries').update({ flagged }).eq('id', id);
@@ -43,6 +54,19 @@ export function TimelinePage() {
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {entries.length} {entries.length === 1 ? 'entry' : 'entries'} logged
           </p>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3 flex-wrap">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search entries by keyword…"
+            className="w-full rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-[#1A1B23] pl-9 pr-4 py-2 text-sm text-gray-700 dark:text-gray-200 outline-none focus:ring-2 focus:ring-lavender-400 transition-all"
+          />
         </div>
         <div className="flex items-center gap-2">
           <Filter className="w-4 h-4 text-gray-400" />
@@ -66,7 +90,11 @@ export function TimelinePage() {
       ) : filtered.length === 0 ? (
         <div className="card p-8 text-center">
           <p className="text-sm text-gray-400 dark:text-gray-500">
-            {filterTag === 'all' ? 'No entries yet. Log your first symptom on Quick Log.' : `No entries with tag "${filterTag}".`}
+            {searchQuery.trim()
+              ? `No entries matching "${searchQuery}".`
+              : filterTag !== 'all'
+                ? `No entries with tag "${filterTag}".`
+                : 'No entries yet. Log your first symptom on Quick Log.'}
           </p>
         </div>
       ) : (

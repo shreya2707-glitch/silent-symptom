@@ -7,6 +7,7 @@ export function SignupPage({ onSwitch }: { onSwitch: () => void }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [condition, setCondition] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -14,7 +15,7 @@ export function SignupPage({ onSwitch }: { onSwitch: () => void }) {
     e.preventDefault();
     setError('');
     setLoading(true);
-    const { error } = await signUp(email, password, name);
+    const { error } = await signUp(email, password, name, condition.trim() || undefined);
     if (error) setError(error);
     setLoading(false);
   };
@@ -64,6 +65,19 @@ export function SignupPage({ onSwitch }: { onSwitch: () => void }) {
               className="w-full rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-[#1A1B23] px-4 py-2.5 text-gray-800 dark:text-gray-100 outline-none focus:ring-2 focus:ring-lavender-400 transition-all"
               placeholder="At least 6 characters"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+              Condition you're tracking <span className="text-gray-400 dark:text-gray-500 font-normal">(optional)</span>
+            </label>
+            <input
+              type="text"
+              value={condition}
+              onChange={(e) => setCondition(e.target.value)}
+              className="w-full rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-[#1A1B23] px-4 py-2.5 text-gray-800 dark:text-gray-100 outline-none focus:ring-2 focus:ring-lavender-400 transition-all"
+              placeholder="e.g. possible endometriosis"
+            />
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">This helps personalize your experience — it's not a diagnosis.</p>
           </div>
           {error && <p className="text-sm text-red-500 dark:text-red-400">{error}</p>}
           <button type="submit" disabled={loading} className="btn-accent w-full flex items-center justify-center gap-2">

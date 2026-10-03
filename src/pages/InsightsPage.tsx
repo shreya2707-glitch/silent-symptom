@@ -6,6 +6,8 @@ import {
   BarChart, Bar,
 } from 'recharts';
 import { useTheme } from '@/context/ThemeContext';
+import { BodyMap } from '@/components/BodyMap';
+import { WeeklyComparison } from '@/components/WeeklyComparison';
 
 export function InsightsPage() {
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -83,6 +85,15 @@ export function InsightsPage() {
         </div>
       ) : (
         <>
+          <WeeklyComparison entries={entries} />
+
+          <div className="card p-6 animate-fade-in">
+            <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
+              Body Map
+            </h2>
+            <BodyMap entries={entries} />
+          </div>
+
           <div className="card p-6 animate-fade-in">
             <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
               Severity Over Time

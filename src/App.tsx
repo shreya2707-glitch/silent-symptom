@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { Sidebar } from '@/components/Sidebar';
@@ -8,6 +8,8 @@ import { QuickLogPage } from '@/pages/QuickLogPage';
 import { TimelinePage } from '@/pages/TimelinePage';
 import { DoctorSummaryPage } from '@/pages/DoctorSummaryPage';
 import { InsightsPage } from '@/pages/InsightsPage';
+import { OnboardingCarousel } from '@/components/OnboardingCarousel';
+import { PulseWave } from '@/components/PulseWave';
 import { Loader2, Heart } from 'lucide-react';
 import type { Page } from '@/lib/types';
 
@@ -15,14 +17,27 @@ function AuthGate() {
   const { session, loading } = useAuth();
   const [authView, setAuthView] = useState<'login' | 'signup'>('login');
   const [page, setPage] = useState<Page>('quicklog');
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    if (session && !localStorage.getItem('silent-symptom-onboarded')) {
+      setShowOnboarding(true);
+    }
+  }, [session]);
+
+  const dismissOnboarding = () => {
+    setShowOnboarding(false);
+    localStorage.setItem('silent-symptom-onboarded', 'true');
+  };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FAFAF8] dark:bg-[#1A1B23] flex items-center justify-center transition-colors duration-200">
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-col items-center gap-4 relative">
           <div className="w-12 h-12 rounded-2xl bg-lavender-500 flex items-center justify-center animate-pulse-slow">
             <Heart className="w-6 h-6 text-white" fill="white" />
           </div>
+          <PulseWave className="w-48 h-6 text-lavender-400 dark:text-lavender-500" />
           <Loader2 className="w-5 h-5 animate-spin text-lavender-500" />
         </div>
       </div>
@@ -48,6 +63,7 @@ function AuthGate() {
           {page === 'insights' && <InsightsPage />}
         </div>
       </main>
+      {showOnboarding && <OnboardingCarousel onDismiss={dismissOnboarding} />}
     </div>
   );
 }

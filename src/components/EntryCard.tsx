@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Entry } from '@/lib/supabase';
 import { TagPill } from '@/components/TagPill';
+import { SeverityDots } from '@/components/SeverityDots';
 import { Flag } from 'lucide-react';
 
 export function EntryCard({ entry, onFlagToggle }: { entry: Entry; onFlagToggle?: (id: string, flagged: boolean) => void }) {
@@ -8,14 +9,6 @@ export function EntryCard({ entry, onFlagToggle }: { entry: Entry; onFlagToggle?
   const date = new Date(entry.created_at);
   const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   const timeStr = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-
-  const severityColor = (s: number) => {
-    if (s >= 5) return 'bg-red-400';
-    if (s >= 4) return 'bg-orange-400';
-    if (s >= 3) return 'bg-yellow-400';
-    if (s >= 2) return 'bg-lime-400';
-    return 'bg-green-400';
-  };
 
   return (
     <div
@@ -35,17 +28,8 @@ export function EntryCard({ entry, onFlagToggle }: { entry: Entry; onFlagToggle?
             </>
           )}
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1" title={`Severity: ${entry.severity}/5`}>
-            <div className="flex gap-0.5">
-              {[1, 2, 3, 4, 5].map((n) => (
-                <div
-                  key={n}
-                  className={`w-1.5 h-3 rounded-sm transition-colors duration-200 ${n <= entry.severity ? severityColor(entry.severity) : 'bg-gray-200 dark:bg-gray-600'}`}
-                />
-              ))}
-            </div>
-          </div>
+        <div className="flex items-center gap-2.5">
+          <SeverityDots severity={entry.severity} />
           {onFlagToggle && (
             <button
               onClick={() => onFlagToggle(entry.id, !entry.flagged)}

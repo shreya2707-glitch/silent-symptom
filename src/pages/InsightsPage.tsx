@@ -8,7 +8,7 @@ import {
 import { useTheme } from '@/context/ThemeContext';
 import { BodyMap } from '@/components/BodyMap';
 import { WeeklyComparison } from '@/components/WeeklyComparison';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 export function InsightsPage() {
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -56,6 +56,39 @@ export function InsightsPage() {
 
   const maxTagCount = Math.max(...tagRanking.map((t) => t[1]), 1);
 
+  const heroStat = useMemo(() => {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const thisMonth = entries.filter((e) => new Date(e.created_at) >= monthStart);
+
+    const last7 = entries.filter((e) => {
+      const d = new Date(e.created_at);
+      const cutoff = new Date(now);
+      cutoff.setDate(cutoff.getDate() - 7);
+      return d >= cutoff;
+    });
+    const prev7 = entries.filter((e) => {
+      const d = new Date(e.created_at);
+      const cutoff = new Date(now);
+      cutoff.setDate(cutoff.getDate() - 7);
+      const prevCutoff = new Date(now);
+      prevCutoff.setDate(prevCutoff.getDate() - 14);
+      return d < cutoff && d >= prevCutoff;
+    });
+
+    const last7Avg = last7.length > 0 ? last7.reduce((s, e) => s + e.severity, 0) / last7.length : 0;
+    const prev7Avg = prev7.length > 0 ? prev7.reduce((s, e) => s + e.severity, 0) / prev7.length : 0;
+    const trendDiff = last7Avg - prev7Avg;
+    const trend: 'up' | 'down' | 'stable' = Math.abs(trendDiff) < 0.3 ? 'stable' : trendDiff > 0 ? 'up' : 'down';
+
+    return {
+      monthCount: thisMonth.length,
+      last7Avg: last7Avg > 0 ? last7Avg.toFixed(1) : '—',
+      trend,
+      trendDiff: Math.abs(trendDiff).toFixed(1),
+    };
+  }, [entries]);
+
   const isDark = theme === 'dark';
   const axisColor = isDark ? '#9ca3af' : '#6b7280';
   const gridColor = isDark ? '#374151' : '#e5e7eb';
@@ -77,6 +110,44 @@ export function InsightsPage() {
           Trends and patterns across your <span className="font-semibold tabular-nums text-gray-600 dark:text-gray-300">{entries.length}</span> logged {entries.length === 1 ? 'entry' : 'entries'}.
         </p>
       </div>
+
+      {entries.length > 0 && (
+        <div className="card p-6 animate-fade-in flex items-center gap-6 flex-wrap">
+          <div className="flex items-baseline gap-2">
+            <span className="text-5xl font-extrabold tabular-nums text-lavender-600 dark:text-lavender-400 tracking-tight">
+              {heroStat.monthCount}
+            </span>
+            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              {heroStat.monthCount === 1 ? 'entry' : 'entries'} this month
+            </span>
+          </div>
+          <div className="h-10 w-px bg-gray-200 dark:bg-gray-700" />
+          <div className="flex flex-col gap-1">
+            <span className="text-xs uppercase tracking-wider text-gray-400 dark:text-gray-500 font-semibold">7-day avg severity</span>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold tabular-nums text-gray-800 dark:text-gray-100">
+                {heroStat.last7Avg}
+              </span>
+              {heroStat.trend !== 'stable' && heroStat.last7Avg !== '—' && (
+                <span className={`inline-flex items-center gap-0.5 text-xs font-semibold px-1.5 py-0.5 rounded-full ${
+                  heroStat.trend === 'down'
+                    ? 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/30'
+                    : 'text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/30'
+                }`}>
+                  {heroStat.trend === 'down' ? <TrendingDown className="w-3 h-3" /> : <TrendingUp className="w-3 h-3" />}
+                  {heroStat.trendDiff}
+                </span>
+              )}
+              {heroStat.trend === 'stable' && heroStat.last7Avg !== '—' && (
+                <span className="inline-flex items-center gap-0.5 text-xs font-semibold px-1.5 py-0.5 rounded-full text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700/40">
+                  <Minus className="w-3 h-3" />
+                  stable
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {entries.length === 0 ? (
         <div className="empty-state">

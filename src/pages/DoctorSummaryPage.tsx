@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase, type Entry } from '@/lib/supabase';
 import { generateDoctorSummary } from '@/lib/ai';
+import { ClinicalDocument } from '@/components/ClinicalDocument';
 import { Loader2, Copy, Check, FileDown, FileText, ClipboardList } from 'lucide-react';
 
 export function DoctorSummaryPage() {
@@ -42,7 +43,7 @@ export function DoctorSummaryPage() {
 
   return (
     <div className="max-w-3xl mx-auto p-8 space-y-8">
-      <div>
+      <div className="no-print">
         <h1 className="page-title">Doctor Summary</h1>
         <p className="page-desc">Generate a clinical-style summary of your symptoms for your next doctor visit.</p>
       </div>
@@ -80,7 +81,7 @@ export function DoctorSummaryPage() {
       </div>
 
       {entries.length === 0 && !generating && (
-        <div className="empty-state">
+        <div className="empty-state no-print">
           <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700/50 flex items-center justify-center">
             <ClipboardList className="w-5 h-5 text-gray-300 dark:text-gray-500" />
           </div>
@@ -90,18 +91,14 @@ export function DoctorSummaryPage() {
       )}
 
       {generating && (
-        <div className="empty-state animate-fade-in">
+        <div className="empty-state no-print animate-fade-in">
           <Loader2 className="w-6 h-6 animate-spin text-lavender-500" />
           <p className="text-sm text-gray-500 dark:text-gray-400">Compiling your summary…</p>
         </div>
       )}
 
       {hasGenerated && !generating && (
-        <div className="card printable p-8 animate-fade-in-up">
-          <pre className="whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-200 leading-relaxed font-sans">
-            {summary}
-          </pre>
-        </div>
+        <ClinicalDocument summary={summary} entries={entries} />
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Heart, Loader2 } from 'lucide-react';
+import { PulseWave } from '@/components/PulseWave';
 
 export function SignupPage({ onSwitch }: { onSwitch: () => void }) {
   const { signUp } = useAuth();
@@ -21,8 +22,10 @@ export function SignupPage({ onSwitch }: { onSwitch: () => void }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8] dark:bg-[#1A1B23] flex items-center justify-center p-4 transition-colors duration-200">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-[#FAFAF8] dark:bg-[#1A1B23] flex items-center justify-center p-4 transition-colors duration-200 relative overflow-hidden">
+      <PulseWave className="absolute top-1/4 left-0 w-full h-16 text-lavender-300 dark:text-lavender-700/30" />
+      <PulseWave className="absolute bottom-1/4 left-0 w-full h-16 text-lavender-300 dark:text-lavender-700/30" />
+      <div className="w-full max-w-md relative z-10">
         <div className="flex flex-col items-center mb-8">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-lavender-100 to-lavender-200 dark:from-lavender-900/40 dark:to-lavender-800/30 flex items-center justify-center mb-4 animate-pulse-slow">
             <Heart className="w-8 h-8 text-lavender-600 dark:text-lavender-400" fill="currentColor" />

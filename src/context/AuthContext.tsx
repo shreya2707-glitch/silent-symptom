@@ -27,13 +27,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user?.user_metadata?.condition ?? null;
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (error) console.error('Failed to get session:', error.message);
       setSession(data.session);
+      setLoading(false);
+    }).catch((err) => {
+      console.error('Session check failed:', err);
       setLoading(false);
     });
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, sess) => {
       setSession(sess);
+      setLoading(false);
     });
 
     return () => sub.subscription.unsubscribe();
@@ -59,7 +64,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+    if (error) console.error('Sign out failed:', error.message);
   };
 
   const updateCondition = async (cond: string) => {

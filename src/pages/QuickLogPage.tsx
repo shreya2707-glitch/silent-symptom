@@ -9,6 +9,7 @@ import { Loader2, Flame, Sparkles, PenLine } from 'lucide-react';
 export function QuickLogPage() {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [entries, setEntries] = useState<Entry[]>([]);
   const [allEntries, setAllEntries] = useState<Entry[]>([]);
   const [streak, setStreak] = useState(0);
@@ -90,11 +91,14 @@ export function QuickLogPage() {
     return count;
   };
 
+  const MAX_TEXT_LENGTH = 5000;
+
   const handleLog = async () => {
     if (!text.trim()) return;
     setLoading(true);
+    setError('');
     const { tags, severity, bodyArea } = extractFromText(text);
-    const { data, error } = await supabase
+    const { error: insertError } = await supabase
       .from('entries')
       .insert({
         raw_text: text.trim(),
@@ -102,11 +106,12 @@ export function QuickLogPage() {
         severity,
         body_area: bodyArea,
         flagged: false,
-      })
-      .select()
-      .single();
+      });
     setLoading(false);
-    if (error) return;
+    if (insertError) {
+      setError('Could not save your entry — please try again.');
+      return;
+    }
     setText('');
     await fetchData();
   };
@@ -167,10 +172,14 @@ export function QuickLogPage() {
         )}
         <textarea
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => { setText(e.target.value.slice(0, MAX_TEXT_LENGTH)); setError(''); }}
           placeholder="My lower back has been aching since I woke up. Felt a sharp pinch when bending over..."
           className="w-full h-32 resize-none rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-[#1A1B23] px-4 py-3 text-gray-800 dark:text-gray-100 outline-none focus:ring-2 focus:ring-lavender-400 focus:border-transparent transition-all text-sm leading-relaxed placeholder:text-gray-400 dark:placeholder:text-gray-500"
+          maxLength={MAX_TEXT_LENGTH}
         />
+        {error && (
+          <p className="text-sm text-red-500 dark:text-red-400 font-medium mt-2" role="alert">{error}</p>
+        )}
         <div className="flex items-center justify-between mt-4">
           <span className="text-xs text-gray-400 dark:text-gray-500 tabular-nums">
             {text.trim() ? `${text.trim().length} characters` : 'Start typing above'}
@@ -215,7 +224,12 @@ export function QuickLogPage() {
   );
 
   async function handleFlagToggle(id: string, flagged: boolean) {
-    await supabase.from('entries').update({ flagged }).eq('id', id);
-    setEntries((prev) => prev.map((e) => (e.id === id ? { ...e, flagged } : e)));
+    const prev = entries;
+    setEntries((cur) => cur.map((e) => (e.id === id ? { ...e, flagged } : e)));
+    const { error } = await supabase.from('entries').update({ flagged }).eq('id', id);
+    if (error) {
+      setEntries(prev);
+      console.error('Failed to update flag:', error.message);
+    }
   }
 }

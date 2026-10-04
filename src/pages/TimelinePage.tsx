@@ -42,8 +42,13 @@ export function TimelinePage() {
   }, [entries, filterTag, searchQuery]);
 
   const handleFlagToggle = async (id: string, flagged: boolean) => {
-    await supabase.from('entries').update({ flagged }).eq('id', id);
-    setEntries((prev) => prev.map((e) => (e.id === id ? { ...e, flagged } : e)));
+    const prev = entries;
+    setEntries((cur) => cur.map((e) => (e.id === id ? { ...e, flagged } : e)));
+    const { error } = await supabase.from('entries').update({ flagged }).eq('id', id);
+    if (error) {
+      setEntries(prev);
+      console.error('Failed to update flag:', error.message);
+    }
   };
 
   return (

@@ -9,7 +9,7 @@ type Section = {
   items: { date: string; text: string; severity: number; tags: string[]; flagged: boolean }[];
 };
 
-export function ClinicalDocument({ summary, entries }: { summary: string; entries: Entry[] }) {
+export function ClinicalDocument({ entries }: { entries: Entry[] }) {
   const { displayName, condition } = useAuth();
 
   const now = new Date().toLocaleDateString('en-US', {

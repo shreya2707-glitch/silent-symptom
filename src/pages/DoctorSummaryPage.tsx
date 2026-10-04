@@ -98,7 +98,7 @@ export function DoctorSummaryPage() {
       )}
 
       {hasGenerated && !generating && (
-        <ClinicalDocument summary={summary} entries={entries} />
+        <ClinicalDocument entries={entries} />
       )}
     </div>
   );

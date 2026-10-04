@@ -97,8 +97,7 @@ export async function generateDoctorSummary(entries: Entry[]): Promise<string> {
   }
 
   const flagged = entries.filter((e) => e.flagged);
-  const unflagged = entries.filter((e) => !e.flagged);
-  const ordered = [...flagged, ...unflagged];
+  const ordered = [...flagged, ...entries.filter((e) => !e.flagged)];
 
   const entryLines = ordered
     .map((e) => {

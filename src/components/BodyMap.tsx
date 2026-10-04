@@ -46,7 +46,6 @@ export function BodyMap({ entries }: { entries: Entry[] }) {
 
   const regionCount = (region: string): number => regionCounts.get(region) ?? 0;
 
-  const silhouetteFill = isDark ? '#2d2e3a' : '#f3f4f6';
   const silhouetteStroke = isDark ? '#4b5563' : '#d1d5db';
 
   const regionLabels: { region: string; label: string }[] = [

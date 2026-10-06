@@ -121,6 +121,11 @@
 .stagger > *:nth-child(8) { animation-delay: 350ms; }
 .stagger > *:nth-child(n+9) { animation-delay: 400ms; }
 
+/* Safe area for mobile bottom nav */
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 /* Print styles */
 @media print {
   body * {

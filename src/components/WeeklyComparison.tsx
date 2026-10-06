@@ -52,9 +52,9 @@ export function WeeklyComparison({ entries }: { entries: Entry[] }) {
   }, [entries]);
 
   const trendConfig = {
-    up: { icon: TrendingUp, color: 'text-orange-500 dark:text-orange-400', bg: 'bg-orange-50 dark:bg-orange-900/20', label: 'worsening' },
-    down: { icon: TrendingDown, color: 'text-green-500 dark:text-green-400', bg: 'bg-green-50 dark:bg-green-900/20', label: 'improving' },
-    stable: { icon: Minus, color: 'text-gray-400 dark:text-gray-500', bg: 'bg-gray-50 dark:bg-gray-700/30', label: 'stable' },
+    up: { icon: TrendingUp, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-amber-950/30', label: 'worsening' },
+    down: { icon: TrendingDown, color: 'text-success-600 dark:text-success-400', bg: 'bg-success-50 dark:bg-success-950/30', label: 'improving' },
+    stable: { icon: Minus, color: 'text-gray-400 dark:text-gray-500', bg: 'bg-gray-100 dark:bg-gray-800/50', label: 'stable' },
   };
 
   const sevCfg = trendConfig[comparison.severityTrend];
@@ -63,37 +63,37 @@ export function WeeklyComparison({ entries }: { entries: Entry[] }) {
   const CntIcon = cntCfg.icon;
 
   return (
-    <div className="card p-6 animate-fade-in">
-      <h2 className="section-header mb-4">This Week vs Last Week</h2>
-      <div className="grid grid-cols-2 gap-4">
+    <div className="card p-5 animate-fade-in">
+      <h2 className="section-label mb-4">This week vs last week</h2>
+      <div className="grid grid-cols-2 gap-6">
         <div>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Avg Severity</p>
-          <div className="flex items-center gap-2">
-            <span className="stat-number">
+          <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Avg severity</p>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-xl font-bold tabular-nums text-gray-900 dark:text-gray-50">
               {comparison.thisAvg}
             </span>
             <span className="text-xs text-gray-400 dark:text-gray-500">/ 5</span>
           </div>
-          <div className={`inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-medium ${sevCfg.bg} ${sevCfg.color}`}>
-            <SevIcon className="w-3 h-3" />
+          <div className={`inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-md text-xs font-medium ${sevCfg.bg} ${sevCfg.color}`}>
+            <SevIcon className="w-3 h-3" style={{ width: 12, height: 12 }} />
             {comparison.severityTrend === 'stable' ? 'stable' : `${comparison.severityDiff} ${sevCfg.label}`}
           </div>
-          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">
+          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1.5">
             Last week: {comparison.lastAvg}/5
           </p>
         </div>
         <div>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Entries Logged</p>
-          <div className="flex items-center gap-2">
-            <span className="stat-number tabular-nums">
+          <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Entries logged</p>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-xl font-bold tabular-nums text-gray-900 dark:text-gray-50">
               {comparison.thisCount}
             </span>
           </div>
-          <div className={`inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-medium ${cntCfg.bg} ${cntCfg.color}`}>
-            <CntIcon className="w-3 h-3" />
+          <div className={`inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-md text-xs font-medium ${cntCfg.bg} ${cntCfg.color}`}>
+            <CntIcon className="w-3 h-3" style={{ width: 12, height: 12 }} />
             {comparison.countTrend === 'stable' ? 'stable' : `${comparison.countDiff} ${comparison.countTrend === 'up' ? 'more' : 'fewer'}`}
           </div>
-          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">
+          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1.5">
             Last week: {comparison.lastCount}
           </p>
         </div>

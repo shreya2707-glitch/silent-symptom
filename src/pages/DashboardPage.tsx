@@ -2,12 +2,11 @@ import { useEffect, useState, useMemo } from 'react';
 import { supabase, type Entry } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/Toast';
-import { extractFromText } from '@/lib/ai';
 import { EntryCard } from '@/components/EntryCard';
 import { NudgeBanner } from '@/components/NudgeBanner';
 import { WeeklyComparison } from '@/components/WeeklyComparison';
-import { Skeleton, EntryCardSkeleton, StatCardSkeleton } from '@/components/Skeleton';
-import { PenLine, Clock, MapPin, Flame, ArrowRight, Loader2, Sparkles } from 'lucide-react';
+import { EntryCardSkeleton, StatCardSkeleton } from '@/components/Skeleton';
+import { PenLine, Clock, MapPin, Flame, ArrowRight } from 'lucide-react';
 import type { Page } from '@/lib/types';
 
 export function DashboardPage({ onNavigate }: { onNavigate: (page: Page) => void }) {

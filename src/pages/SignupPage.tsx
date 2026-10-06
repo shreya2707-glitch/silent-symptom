@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { Heart, Loader2, Check, Circle } from 'lucide-react';
-import { PulseWave } from '@/components/PulseWave';
+import { Heart, Loader2, Check, Circle, ArrowLeft } from 'lucide-react';
 import { PasswordInput } from '@/components/PasswordInput';
 import {
   PASSWORD_CHECKS,
@@ -11,7 +10,7 @@ import {
   friendlyAuthError,
 } from '@/lib/password';
 
-export function SignupPage({ onSwitch }: { onSwitch: () => void }) {
+export function SignupPage({ onSwitch, onBack }: { onSwitch: () => void; onBack: () => void }) {
   const { signUp } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -37,19 +36,25 @@ export function SignupPage({ onSwitch }: { onSwitch: () => void }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8] dark:bg-[#1A1B23] flex items-center justify-center p-4 transition-colors duration-200 relative overflow-hidden">
-      <PulseWave className="absolute top-1/4 left-0 w-full h-16 text-lavender-300 dark:text-lavender-700/30" />
-      <PulseWave className="absolute bottom-1/4 left-0 w-full h-16 text-lavender-300 dark:text-lavender-700/30" />
-      <div className="w-full max-w-md relative z-10">
+    <div className="min-h-screen bg-[#FBFBFA] dark:bg-[#18181B] flex items-center justify-center p-4 transition-colors duration-200">
+      <div className="w-full max-w-sm">
+        <button
+          onClick={onBack}
+          className="mb-6 inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to home
+        </button>
+
         <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-lavender-100 to-lavender-200 dark:from-lavender-900/40 dark:to-lavender-800/30 flex items-center justify-center mb-4 animate-pulse-slow">
-            <Heart className="w-8 h-8 text-lavender-600 dark:text-lavender-400" fill="currentColor" />
+          <div className="w-10 h-10 rounded-lg bg-gray-900 dark:bg-gray-100 flex items-center justify-center mb-3">
+            <Heart className="w-5 h-5 text-white dark:text-gray-900" fill="currentColor" />
           </div>
-          <h1 className="text-2xl font-extrabold text-gray-800 dark:text-gray-100 tracking-tight">Silent Symptom</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5 leading-relaxed">Create an account to start tracking your symptoms.</p>
+          <h1 className="text-xl font-bold tracking-tight">Silent Symptom</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5 leading-relaxed text-center">Create an account to start tracking your symptoms.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="card p-8 space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Display Name</label>
             <input
@@ -82,10 +87,9 @@ export function SignupPage({ onSwitch }: { onSwitch: () => void }) {
               autoComplete="new-password"
             />
 
-            {/* Strength bar */}
             {password.length > 0 && (
               <div className="mt-2 flex items-center gap-2" id="password-strength" role="status" aria-live="polite">
-                <div className="flex-1 h-1.5 bg-gray-100 dark:bg-gray-700/50 rounded-full overflow-hidden">
+                <div className="flex-1 h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all duration-300 ${strengthCfg.barClass}`}
                     style={{ width: strengthCfg.width }}
@@ -95,18 +99,17 @@ export function SignupPage({ onSwitch }: { onSwitch: () => void }) {
               </div>
             )}
 
-            {/* Requirements checklist */}
             <ul id="password-checks" className="mt-2.5 space-y-1" aria-label="Password requirements">
               {PASSWORD_CHECKS.map((check) => {
                 const passed = check.test(password);
                 return (
                   <li key={check.label} className="flex items-center gap-1.5 text-xs">
                     {passed ? (
-                      <Check className="w-3.5 h-3.5 text-teal-500 dark:text-teal-400 flex-shrink-0" />
+                      <Check className="w-3.5 h-3.5 text-success-500 dark:text-success-400 flex-shrink-0" style={{ width: 14, height: 14 }} />
                     ) : (
-                      <Circle className="w-3 h-3 text-gray-300 dark:text-gray-600 flex-shrink-0" />
+                      <Circle className="w-3 h-3 text-gray-300 dark:text-gray-600 flex-shrink-0" style={{ width: 12, height: 12 }} />
                     )}
-                    <span className={passed ? 'text-teal-600 dark:text-teal-400' : 'text-gray-400 dark:text-gray-500'}>
+                    <span className={passed ? 'text-success-600 dark:text-success-400' : 'text-gray-400 dark:text-gray-500'}>
                       {check.label}
                     </span>
                   </li>
@@ -124,7 +127,7 @@ export function SignupPage({ onSwitch }: { onSwitch: () => void }) {
               autoComplete="new-password"
             />
             {showConfirmError && (
-              <p id="confirm-error" className="text-xs text-red-500 dark:text-red-400 mt-1.5 font-medium" role="alert">
+              <p id="confirm-error" className="text-xs text-danger-600 dark:text-danger-400 mt-1.5 font-medium" role="alert">
                 Passwords don't match
               </p>
             )}
@@ -143,21 +146,21 @@ export function SignupPage({ onSwitch }: { onSwitch: () => void }) {
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-1.5 leading-relaxed">This helps personalize your experience — it's not a diagnosis.</p>
           </div>
           {error && (
-            <p className="text-sm text-red-500 dark:text-red-400 font-medium" role="alert">
+            <p className="text-sm text-danger-600 dark:text-danger-400 font-medium" role="alert">
               {error}
             </p>
           )}
           <button
             type="submit"
             disabled={!canSubmit || loading}
-            className="btn-accent w-full flex items-center justify-center gap-2"
+            className="btn-primary w-full"
           >
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-            {loading ? 'Creating account…' : 'Sign up'}
+            {loading ? 'Creating account…' : 'Create account'}
           </button>
           <p className="text-center text-sm text-gray-500 dark:text-gray-400">
             Already have an account?{' '}
-            <button type="button" onClick={onSwitch} className="text-lavender-600 dark:text-lavender-400 font-semibold hover:underline">
+            <button type="button" onClick={onSwitch} className="text-brand-600 dark:text-brand-400 font-semibold hover:underline">
               Log in
             </button>
           </p>

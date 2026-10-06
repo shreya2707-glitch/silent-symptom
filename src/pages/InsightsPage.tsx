@@ -9,7 +9,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar,
 } from 'recharts';
-import { BarChart3, TrendingUp, TrendingDown, Minus, Activity, MapPin, Calendar, Hash } from 'lucide-react';
+import { BarChart3, Activity, MapPin, Calendar, Hash } from 'lucide-react';
 
 export function InsightsPage() {
   const [entries, setEntries] = useState<Entry[]>([]);

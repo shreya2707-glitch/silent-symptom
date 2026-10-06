@@ -41,7 +41,7 @@ export function BodyMap({ entries }: { entries: Entry[] }) {
     const intensity = getIntensity(region);
     if (intensity === 0) return isDark ? '#374151' : '#e5e7eb';
     const alpha = 0.2 + intensity * 0.8;
-    return `rgba(149, 80, 245, ${alpha})`;
+    return `rgba(99, 102, 241, ${alpha})`;
   };
 
   const regionCount = (region: string): number => regionCounts.get(region) ?? 0;

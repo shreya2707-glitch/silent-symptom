@@ -2,12 +2,10 @@ import { useEffect, useState } from 'react';
 import { supabase, type Entry } from '@/lib/supabase';
 import { generateDoctorSummary } from '@/lib/ai';
 import { ClinicalDocument } from '@/components/ClinicalDocument';
-import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/Toast';
 import { Loader2, Copy, Check, FileDown, FileText, ClipboardList, Eye } from 'lucide-react';
 
 export function DoctorSummaryPage() {
-  const { displayName, condition } = useAuth();
   const { showToast } = useToast();
   const [entries, setEntries] = useState<Entry[]>([]);
   const [summary, setSummary] = useState('');

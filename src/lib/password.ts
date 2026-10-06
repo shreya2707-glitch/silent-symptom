@@ -31,9 +31,9 @@ export function getPasswordStrength(pw: string): PasswordStrength {
 }
 
 export const STRENGTH_CONFIG: Record<PasswordStrength, { label: string; color: string; barClass: string; width: string }> = {
-  weak: { label: 'Weak', color: 'text-red-500 dark:text-red-400', barClass: 'bg-red-400', width: '33%' },
+  weak: { label: 'Weak', color: 'text-danger-600 dark:text-danger-400', barClass: 'bg-danger-400', width: '33%' },
   medium: { label: 'Medium', color: 'text-amber-600 dark:text-amber-400', barClass: 'bg-amber-400', width: '66%' },
-  strong: { label: 'Strong', color: 'text-teal-600 dark:text-teal-400', barClass: 'bg-teal-500', width: '100%' },
+  strong: { label: 'Strong', color: 'text-success-600 dark:text-success-400', barClass: 'bg-success-500', width: '100%' },
 };
 
 export function friendlyAuthError(message: string): string {

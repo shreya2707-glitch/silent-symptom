@@ -1,3 +1,3 @@
-export type Page = 'quicklog' | 'timeline' | 'summary' | 'insights';
+export type Page = 'dashboard' | 'quicklog' | 'timeline' | 'insights' | 'reports';
 
 export type Theme = 'light' | 'dark';

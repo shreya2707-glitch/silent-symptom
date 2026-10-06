@@ -1,129 +1,299 @@
 <div align="center">
 
-```
-┌─────────────────────────────────────────────┐
-│  🩺  SILENT SYMPTOM                           │
-│  entry logged · HACKDAY 1.0 · 8-hour build   │
-└─────────────────────────────────────────────┘
-```
+<br>
 
-### *"felt dismissed again today. nobody connects the dots until it's too late."*
-**tags:** `#frustration` `#7-10 years` `#finally-building-something`
+# 🩺 Silent Symptom
 
-[![Live Demo](https://img.shields.io/badge/→_try_it_live-3EC6B6?style=for-the-badge)](https://silent-symptom-healt-2k83.bolt.host/)
-[![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
-[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com/)
-[![Claude](https://img.shields.io/badge/Claude_AI-D97757?style=flat-square&logo=anthropic&logoColor=white)](https://www.anthropic.com/)
-[![Tailwind](https://img.shields.io/badge/Tailwind-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+### Turning scattered symptoms into a doctor-ready story.
+
+<br>
+
+*Built in 8 hours at **HACKDAY 1.0** · Theme: Tech for a Better Tomorrow*
+
+<br>
+
+[![Live Demo](https://img.shields.io/badge/✦_VIEW_LIVE_DEMO-3EC6B6?style=for-the-badge&labelColor=1B1F3B)](https://silent-symptom-healt-2k83.bolt.host/)
+
+<br>
+
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+[![Tailwind](https://img.shields.io/badge/Tailwind-CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-Auth%20%2B%20DB-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com/)
+[![Claude](https://img.shields.io/badge/Claude-Anthropic_API-D97757?style=flat-square&logo=anthropic&logoColor=white)](https://www.anthropic.com/)
+[![Recharts](https://img.shields.io/badge/Recharts-data_viz-FF6F61?style=flat-square)](https://recharts.org/)
+[![Bolt](https://img.shields.io/badge/built_on-bolt.new-000000?style=flat-square)](https://bolt.new/)
+
+<br>
 
 </div>
 
-<br>
-
-## 📖 The Story So Far
-
-Somewhere, right now, someone is writing a note on their phone — *"tired again, joints ache, didn't sleep"* — and deleting it a second later. *Too small to mention. The doctor's busy. It's probably nothing.*
-
-They do this for **years**. Literally — endometriosis, autoimmune disorders, chronic fatigue: the average diagnosis takes **7 to 10 years**, largely because no single symptom ever feels big enough to report on its own.
-
-The pattern was always there. It just never got *organized* long enough to be seen.
-
-**So we built the thing that organizes it.**
+---
 
 <br>
 
-## 🧵 What Silent Symptom Actually Does
+## 📍 Table of Contents
 
+- [The Problem](#-the-problem)
+- [The Solution](#-the-solution)
+- [Who It's For](#-who-its-for)
+- [System Architecture](#️-system-architecture)
+- [User Flow](#-user-flow)
+- [Tech Stack](#️-tech-stack)
+- [Live Demo](#-live-demo)
+- [Market Snapshot](#-market-snapshot)
+- [Changelog](#️-changelog)
+- [Roadmap](#-roadmap)
+- [Team](#-team)
+
+<br>
+
+---
+
+## 💭 The Problem
+
+<br>
+
+> *"It's not that the symptoms aren't real — it's that they're never organized long enough to become visible."*
+
+<br>
+
+Conditions like **endometriosis**, **autoimmune disorders**, and **chronic fatigue** take an average of **7–10 years** to diagnose. Not because the symptoms aren't there — but because they arrive one quiet complaint at a time. A headache here. Bad sleep there. Too minor to mention on their own, too scattered to ever add up to a pattern — until years have passed.
+
+**Silent Symptom exists to close that gap.**
+
+<br>
+
+---
+
+## ✨ The Solution
+
+<br>
+
+<table>
+<tr>
+<td width="25" align="center">📝</td>
+<td><b>Quick Log</b><br/><sub>Write freely — no medical vocabulary needed. AI quietly extracts symptoms, severity, and body area.</sub></td>
+</tr>
+<tr>
+<td align="center">📅</td>
+<td><b>Timeline</b><br/><sub>A tag-filterable history of every entry. Flag the ones that matter most for your next appointment.</sub></td>
+</tr>
+<tr>
+<td align="center">🩺</td>
+<td><b>Doctor Summary</b><br/><sub>One click compiles weeks of notes into a clean, clinical-style report — copy, print, or export as PDF.</sub></td>
+</tr>
+<tr>
+<td align="center">📊</td>
+<td><b>Insights</b><br/><sub>Visual patterns in frequency and severity over time — spot the trend before your doctor even asks.</sub></td>
+</tr>
+</table>
+
+<br>
+
+---
+
+## 👥 Who It's For
+
+<br>
+
+| | |
+|:---:|---|
+| ❤️ | **Underdiagnosed patients** — living with conditions that take years to name |
+| ✦ | **Caregivers** — tracking symptoms on behalf of someone who can't log it themselves |
+| ⚕️ | **Doctors & specialists** — who want structure instead of a scattered verbal recap |
+| ◈ | **Health-conscious individuals** — building self-awareness before it becomes a problem |
+
+<br>
+
+---
+
+## 🏗️ System Architecture
+
+<br>
+
+```mermaid
+flowchart TB
+    subgraph client["🖥️ CLIENT — React + Tailwind"]
+        UI_LOG["Quick Log"]
+        UI_TL["Timeline"]
+        UI_SUM["Doctor Summary"]
+        UI_INS["Insights"]
+    end
+
+    subgraph services["⚙️ SERVICES"]
+        CLAUDE["🧠 Claude API\ntagging + summarization"]
+        SUPA_AUTH["🔐 Supabase Auth\nemail + password"]
+        SUPA_DB[("🗄️ Supabase Postgres\nentries, per-user")]
+    end
+
+    subgraph host["☁️ HOSTING"]
+        BOLT["Bolt.host\nstatic + edge deploy"]
+    end
+
+    UI_LOG -- "raw symptom text" --> CLAUDE
+    CLAUDE -- "tags · severity · body area" --> SUPA_DB
+    UI_TL -- "fetch entries" --> SUPA_DB
+    UI_SUM -- "fetch all entries" --> SUPA_DB
+    UI_SUM -- "compile prompt" --> CLAUDE
+    CLAUDE -- "clinical-style report" --> UI_SUM
+    UI_INS -- "fetch for charts" --> SUPA_DB
+    UI_LOG & UI_TL & UI_SUM & UI_INS -. "session token" .-> SUPA_AUTH
+    client -. "served from" .-> BOLT
+
+    style client fill:#1B1F3B,color:#FAFAF8,stroke:#3EC6B6
+    style services fill:#242530,color:#FAFAF8,stroke:#FF6F61
+    style host fill:#262B52,color:#FAFAF8,stroke:#3D4B94
 ```
-  you type this ↓                           a doctor sees this ↓
-┌─────────────────────────┐              ┌────────────────────────────┐
-│ "felt tired again,      │              │  SYMPTOM SUMMARY           │
-│  joints ached this      │   ──AI──▶    │  Recurring: fatigue (6x),  │
-│  morning, slept badly"  │              │  joint pain (4x). Pattern: │
-│                         │              │  worse on poor-sleep days. │
-└─────────────────────────┘              └────────────────────────────┘
-```
-
-| Feature | What it's really for |
-|---|---|
-| 📝 **Quick Log** | A blank page, not a form. Say it however it comes out — no medical words required. |
-| 📅 **Timeline** | Your scattered notes, finally lined up in order. Flag the ones that felt *different*. |
-| 🩺 **Doctor Summary** | One click. Weeks of mess → a report a doctor can skim in 30 seconds. |
-| 📊 **Insights** | The pattern you couldn't see while you were living inside it. |
 
 <br>
 
-## 🏗️ How It's Built
+---
 
-```
-Patient logs a symptom
-        │
-        ▼
-AI quietly structures it        ← Claude (Anthropic)
-        │
-        ▼
-Stored, private, per-account    ← Supabase
-        │
-        ▼
-Doctor-ready summary, on demand
-```
-
-**Stack:** React + Tailwind · Supabase (auth + database) · Claude AI · Recharts · deployed on Bolt.host
+## 🔁 User Flow
 
 <br>
 
-## 🔗 Go Poke At It
+```mermaid
+flowchart LR
+    A([Open app]) --> B{Logged in?}
+    B -- no --> C[Sign Up / Login]
+    C --> D[Session created]
+    D --> E["Seeded with\nsample history"]
+    B -- yes --> F[Quick Log entry]
+    E --> F
+    F --> G["Claude extracts\ntags + severity"]
+    G --> H[(Saved to Supabase)]
+    H --> I[Appears on Timeline]
+    I --> J{Flag it?}
+    J -- yes --> K[Pinned for summary]
+    J -- no --> L[Chronological order]
+    K --> M[Generate Doctor Summary]
+    L --> M
+    M --> N["Claude compiles\nclinical report"]
+    N --> O[Copy / Print / PDF]
+    O --> P([Bring to appointment])
 
-**[silent-symptom-healt-2k83.bolt.host →](https://silent-symptom-healt-2k83.bolt.host/)**
-
-Sign up, log two or three entries in plain language over a few "days," then hit **Generate Doctor Summary**. That messy-notes-to-clean-report jump is the whole point of this project — it should feel like a small magic trick.
-
-<br>
-
-## 🗓️ Changelog *(the project's own symptom log, if you will)*
-
-```
-v1.2  ·  Security & Polish
-      — password strength checks, show/hide toggle, kinder error messages
-      — full UI pass: spacing, hover states, typography, consistent cards
-      — dark mode audited end-to-end (yes, even the charts)
-
-v1.1  ·  It Got Real
-      — moved off localStorage, onto real Supabase auth + database
-      — entries now persist per account, seeded with demo history on signup
-
-v1.0  ·  Born at HACKDAY 1.0
-      — Quick Log → Timeline → Doctor Summary → Insights, working end to end
-      — AI tagging + AI-generated clinical summaries
-      — calm, non-clinical visual design, light & dark themes
+    style A fill:#3EC6B6,color:#1B1F3B
+    style P fill:#FF6F61,color:#1B1F3B
+    style G fill:#3D4B94,color:#FAFAF8
+    style N fill:#3D4B94,color:#FAFAF8
 ```
 
 <br>
 
-## 🌱 If We Had More Time
+---
 
-- Wearables plugged in — let sleep and heart-rate data tag along with the symptoms
-- A clinician-side view, for reviewing flagged entries before the patient even walks in
-- Anonymized, opt-in pattern-sharing across people with similar symptom profiles
-- Speaking more than one language, because dismissal isn't an English-only problem
+## 🛠️ Tech Stack
 
 <br>
 
-## 👩‍💻 Built By
+| Layer | Technology | Why |
+|---|---|---|
+| **Frontend** | React 18 + Tailwind CSS | Fast iteration under hackathon time pressure, fully responsive |
+| **Auth & Database** | Supabase | Real accounts & private data, without hand-rolling a backend |
+| **Intelligence** | Claude (Anthropic API) | Structures free-text into tags, severity, and clinical summaries |
+| **Visualization** | Recharts | Native charting for the Insights panel |
+| **Hosting** | Bolt.new / Bolt.host | Zero-config deploy, live link in seconds |
 
-**Shreya** — [@shreya2707-glitch](https://github.com/shreya2707-glitch) — at HACKDAY 1.0, in one 8-hour sitting.
+<br>
+
+---
+
+## 🔗 Live Demo
 
 <br>
 
 <div align="center">
 
-```
-┌─────────────────────────────────────────────┐
-│  not a diagnosis. just a pattern, finally    │
-│  organized enough for someone to believe.    │
-└─────────────────────────────────────────────┘
-```
+### **[→ silent-symptom-healt-2k83.bolt.host](https://silent-symptom-healt-2k83.bolt.host/)**
 
-*For personal symptom tracking only — always consult a healthcare professional.*
+</div>
+
+<br>
+
+1. Sign up — a short sample history will already be waiting
+2. Log a few entries in your own words, across a few "days"
+3. Open **Doctor Summary** → click **Generate**
+4. Watch weeks of scattered notes become a 30-second-skim report
+5. Toggle dark mode, just to see that it holds up too
+
+<br>
+
+---
+
+## 📈 Market Snapshot
+
+<br>
+
+| Metric | Value |
+|---|---|
+| Digital health market size (2025) | **$573B** |
+| Projected market size (2034) | **$2.09T** |
+| CAGR (2026–2034) | **15%** |
+
+<sub>Source: IMARC Group, Digital Health Market Report, 2025</sub>
+
+**Business model:** Freemium (free logging, paid AI summaries/PDF export) · B2B2C (clinics, therapists, insurers) · API licensing (telehealth & EHR platforms)
+
+<br>
+
+---
+
+## 🗓️ Changelog
+
+<br>
+
+**`v1.2`** — Security & Polish
+Password strength UX, show/hide toggle, kinder error messages · full UI refinement pass (spacing, hover states, typography) · dark mode audited end-to-end, charts included
+
+**`v1.1`** — It Got Real
+Migrated localStorage → Supabase (auth + database) · entries persist per authenticated account · new signups auto-seeded with sample history
+
+**`v1.0`** — Genesis
+Born at HACKDAY 1.0 in one 8-hour sitting · core pipeline working end-to-end · light/dark theme and calm visual design established
+
+<br>
+
+---
+
+## 🌱 Roadmap
+
+<br>
+
+- [ ] **Wearable integration** — sleep & heart-rate data correlated with symptoms
+- [ ] **Clinician dashboard** — doctor-side view for flagged entries pre-visit
+- [ ] **Community insights** — anonymized, opt-in pattern-sharing
+- [ ] **Multi-language support** — dismissal isn't an English-only problem
+- [ ] **Voice-based logging** — speak an entry on low-energy, high-pain days
+- [ ] **Deeper EHR handoff** — direct, secure export into patient portals
+
+<br>
+
+---
+
+## 👩‍💻 Team
+
+<br>
+
+**Shreya** — [@shreya2707-glitch](https://github.com/shreya2707-glitch)
+*Solo build, 8 hours, HACKDAY 1.0*
+
+<br>
+
+---
+
+<div align="center">
+
+<br>
+
+*Not a diagnosis. Just a pattern, finally organized enough for someone to believe.*
+
+**For personal symptom tracking only — always consult a licensed healthcare professional.**
+
+<br>
+
+### Built in 8 hours. Designed to matter for years. 🩺
+
+<br>
 
 </div>
